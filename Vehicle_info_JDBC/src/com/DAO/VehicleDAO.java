@@ -2,7 +2,9 @@ package com.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
 import com.Configuration.ConnectionDB;
@@ -96,11 +98,32 @@ public class VehicleDAO {
 	public void Display() throws ClassNotFoundException, SQLException {
 		String query = "select * from vehicle";
 		Connection con = ConnectionDB.connect();
-		PreparedStatement ps = con.prepareStatement(query);
-		
-		ps.executeQuery();
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		while(rs.next()) {
+			System.out.println(rs.getInt(1));
+			System.out.println(rs.getString(2));
+			System.out.println(rs.getDouble(3));
+			System.out.println(rs.getString(4));
+		}
 		
 		con.close();
+	}
+	public void ShowSingleData() throws ClassNotFoundException, SQLException {
+		
+		String query = "select vname from vehicle where vid=?";
+		Connection con = ConnectionDB.connect();
+		PreparedStatement ps = con.prepareStatement(query);
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			System.out.println(rs.getString(1));
+		}
+		ps.close();
+		con.close();
+		
 	}
 	
 }
